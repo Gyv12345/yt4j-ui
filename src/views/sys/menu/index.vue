@@ -44,7 +44,7 @@
             <a-popconfirm
               placement="topRight"
               title="删除本菜单与下级？"
-              @confirm="() => handleDel(record)"
+              @confirm="() => handleDel(record.id)"
             >
               <a>删除</a>
             </a-popconfirm>

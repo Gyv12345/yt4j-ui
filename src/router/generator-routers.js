@@ -2,7 +2,7 @@
 import * as loginService from '@/api/login'
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, PageView, RouteView } from '@/layouts'
-import store from '../store'
+import store from '@/store'
 
 // 前端路由表
 const constantRouterComponents = {

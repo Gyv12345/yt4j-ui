@@ -1,64 +1,51 @@
 <template>
   <pro-layout
-    :title="title"
-    :menus="menus"
-    :collapsed="collapsed"
-    :mediaQuery="query"
-    :isMobile="isMobile"
-    :handleMediaQuery="handleMediaQuery"
-    :handleCollapse="handleCollapse"
-    :logo="logoRender"
-    :i18nRender="i18nRender"
-    v-bind="settings"
+    :title='title'
+    :menus='menus'
+    :collapsed='collapsed'
+    :mediaQuery='query'
+    :isMobile='isMobile'
+    :handleMediaQuery='handleMediaQuery'
+    :handleCollapse='handleCollapse'
+    :logo='logoRender'
+    v-bind='settings'
   >
-    <!-- Ads begin
-      广告代码 真实项目中请移除
-      production remove this Ads
-    -->
-    <ads v-if="isProPreviewSite && !collapsed"/>
-    <!-- Ads end -->
-
-    <setting-drawer :settings="settings" @change="handleSettingChange" />
     <template v-slot:rightContentRender>
-      <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
-      <a-select :default-value="applicationList[0].title" style="width: 200px" @change="handleChange">
-        <a-select-option v-for="item in applicationList" :key="item.id">
-          {{ item.title }}
-        </a-select-option>
-      </a-select>
+      <right-content
+        :top-menu="settings.layout === 'topmenu'"
+        :is-mobile='isMobile'
+        :theme='settings.theme'
+      />
     </template>
     <template v-slot:footerRender>
-      <global-footer />
+      <!-- <global-footer /> -->
+      <span />
     </template>
     <router-view />
   </pro-layout>
 </template>
 
 <script>
-import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
-import { i18nRender } from '@/locales'
 import { mapState } from 'vuex'
 import { SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
 
 import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
-import GlobalFooter from '@/components/GlobalFooter'
-import Ads from '@/components/Other/CarbonAds'
-import LogoSvg from '../assets/logo.svg?inline'
+// import GlobalFooter from '@/components/GlobalFooter'
+import LogoSvg from '@/assets/logo.svg?inline'
 
 export default {
   name: 'BasicLayout',
   components: {
-    SettingDrawer,
-    RightContent,
-    GlobalFooter,
-    Ads
+    // GlobalFooter,
+    RightContent
   },
   data () {
     return {
       applicationData: [],
       // preview.pro.antdv.com only use.
-      isProPreviewSite: process.env.VUE_APP_PREVIEW === 'true' && process.env.NODE_ENV !== 'development',
+      isProPreviewSite:
+        process.env.VUE_APP_PREVIEW === 'true' && process.env.NODE_ENV !== 'development',
       // end
 
       // base
@@ -70,7 +57,8 @@ export default {
         // 布局类型
         layout: defaultSettings.layout, // 'sidemenu', 'topmenu'
         // 定宽: true / 流式: false
-        contentWidth: defaultSettings.layout === 'sidemenu' ? false : defaultSettings.contentWidth === 'Fixed',
+        contentWidth:
+          defaultSettings.layout === 'sidemenu' ? false : defaultSettings.contentWidth === 'Fixed',
         // 主题 'dark' | 'light'
         theme: defaultSettings.navTheme,
         // 主色调
@@ -92,9 +80,7 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters,
-      applicationList: state => state.application.applicationList
-      // applicationCode: state => state.application.code
+      mainMenu: state => state.permission.addRouters
     })
   },
   created () {
@@ -118,15 +104,8 @@ export default {
         }, 16)
       })
     }
-
-    // first update color
-    // TIPS: THEME COLOR HANDLER!! PLEASE CHECK THAT!!
-    if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'true') {
-      updateTheme(this.settings.primaryColor)
-    }
   },
   methods: {
-    i18nRender,
     handleMediaQuery (val) {
       this.query = val
       if (this.isMobile && !val['screen-xs']) {
@@ -162,15 +141,6 @@ export default {
     },
     logoRender () {
       return <LogoSvg />
-    },
-    /**
-     * 应用搜索框变更
-     */
-    handleChange (value) {
-      console.log('选择应用的值是：', value)
-      this.$store.dispatch('SetApplicationCode', value)
-      this.$store.dispatch('GenerateRoutes', { applicationCode: value })
-      this.$router.push({ path: '/' })
     }
   },
   watch: {
@@ -189,6 +159,6 @@ export default {
 }
 </script>
 
-<style lang="less">
-@import "./BasicLayout.less";
+<style lang='less'>
+@import './BasicLayout.less';
 </style>
