@@ -1,21 +1,17 @@
 <template>
   <pro-layout
-    :title='title'
-    :menus='menus'
-    :collapsed='collapsed'
-    :mediaQuery='query'
-    :isMobile='isMobile'
-    :handleMediaQuery='handleMediaQuery'
-    :handleCollapse='handleCollapse'
-    :logo='logoRender'
-    v-bind='settings'
+    :title="title"
+    :menus="menus"
+    :collapsed="collapsed"
+    :mediaQuery="query"
+    :isMobile="isMobile"
+    :handleMediaQuery="handleMediaQuery"
+    :handleCollapse="handleCollapse"
+    :logo="logoRender"
+    v-bind="settings"
   >
     <template v-slot:rightContentRender>
-      <right-content
-        :top-menu="settings.layout === 'topmenu'"
-        :is-mobile='isMobile'
-        :theme='settings.theme'
-      />
+      <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>
     <template v-slot:footerRender>
       <!-- <global-footer /> -->
@@ -40,12 +36,11 @@ export default {
     // GlobalFooter,
     RightContent
   },
-  data () {
+  data() {
     return {
       applicationData: [],
       // preview.pro.antdv.com only use.
-      isProPreviewSite:
-        process.env.VUE_APP_PREVIEW === 'true' && process.env.NODE_ENV !== 'development',
+      isProPreviewSite: process.env.VUE_APP_PREVIEW === 'true' && process.env.NODE_ENV !== 'development',
       // end
 
       // base
@@ -57,8 +52,7 @@ export default {
         // 布局类型
         layout: defaultSettings.layout, // 'sidemenu', 'topmenu'
         // 定宽: true / 流式: false
-        contentWidth:
-          defaultSettings.layout === 'sidemenu' ? false : defaultSettings.contentWidth === 'Fixed',
+        contentWidth: defaultSettings.layout === 'sidemenu' ? false : defaultSettings.contentWidth === 'Fixed',
         // 主题 'dark' | 'light'
         theme: defaultSettings.navTheme,
         // 主色调
@@ -83,7 +77,7 @@ export default {
       mainMenu: state => state.permission.addRouters
     })
   },
-  created () {
+  created() {
     const routes = this.mainMenu.find(item => item.path === '/')
     this.menus = (routes && routes.children) || []
     // 处理侧栏收起状态
@@ -94,7 +88,7 @@ export default {
       this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
     })
   },
-  mounted () {
+  mounted() {
     const userAgent = navigator.userAgent
     if (userAgent.indexOf('Edge') > -1) {
       this.$nextTick(() => {
@@ -106,7 +100,7 @@ export default {
     }
   },
   methods: {
-    handleMediaQuery (val) {
+    handleMediaQuery(val) {
       this.query = val
       if (this.isMobile && !val['screen-xs']) {
         this.isMobile = false
@@ -119,10 +113,10 @@ export default {
         // this.settings.fixSiderbar = false
       }
     },
-    handleCollapse (val) {
+    handleCollapse(val) {
       this.collapsed = val
     },
-    handleSettingChange ({ type, value }) {
+    handleSettingChange({ type, value }) {
       console.log('type', type, value)
       type && (this.settings[type] = value)
       switch (type) {
@@ -139,13 +133,13 @@ export default {
           break
       }
     },
-    logoRender () {
+    logoRender() {
       return <LogoSvg />
     }
   },
   watch: {
     mainMenu: {
-      handler (newValue, oldValue) {
+      handler(newValue, oldValue) {
         if (newValue !== oldValue) {
           // this.getTicketTypeListByArea(newValue);
           const routes = newValue.find(item => item.path === '/')
@@ -159,6 +153,6 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang="less">
 @import './BasicLayout.less';
 </style>
